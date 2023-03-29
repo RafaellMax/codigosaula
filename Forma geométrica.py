@@ -49,4 +49,11 @@ def bloquinhos (n, lado): #constroi uma paredinha de n bloquinhos
     for _ in range(n):
         quadrado(lado)
         forward(lado)
-        
+
+def arena (n, lado): #constrói quatro paredes
+    color("black","red")
+    speed(0)
+    for _ in range(4):
+        bloquinhos(n,lado)
+        right(90)
+           
