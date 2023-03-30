@@ -57,3 +57,10 @@ def arena (n, lado): #constrói quatro paredes
         bloquinhos(n,lado)
         right(90)
            
+def arenassa (n, lado, m=5): #constrói uma arena feita de arenas
+    for _ in range(4):      #n é qnt de quadrados na areninha 
+        for _ in range(m):   #lado é a largura de cada quadradinhho
+            arena(n,lado)     #m é a quantidade de areninhas por arenassa
+            forward(n*lado-1)
+        right(90)
+
