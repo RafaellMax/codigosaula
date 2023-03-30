@@ -1,0 +1,9 @@
+def divisivel(x,y):
+    '''verifica se x é divisivel por y, sendo estes valores inteiros,
+    retornando um valor Booleano.''' #esses ''' fazem um docstring, uma explicação documentada
+    if x%y == 0:        
+        return(True)       
+    elif x%y != 0:       
+        return(False)
+    
+        
