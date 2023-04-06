@@ -64,3 +64,20 @@ def arenassa (n, lado, m=5): #constrói uma arena feita de arenas
             forward(n*lado-1)
         right(90)
 
+
+
+
+
+y=input('1=quadrado; 2=bloquinhos; 3=arena: ')
+
+if y=='1':
+    quadrado(5)
+elif y == '2':
+    bloquinhos(5, 10)
+elif y=='3':
+    arena(7,10)
+
+
+
+
+
