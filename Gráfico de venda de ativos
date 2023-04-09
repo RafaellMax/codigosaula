@@ -1,0 +1,54 @@
+from math import*
+from turtle import*
+import random
+
+up()
+goto(-300,0)
+down()
+speed(1)
+
+x=0
+y=0
+b=0
+l=0 #lucro
+c=0 #ativos comprados
+v=0 #ativos vendidos
+t=c+v #trades realizados
+
+
+def avanço (x=-300,y=0):
+    l=0
+    c=0
+    v=0
+    t=c+v
+    for _ in range(75):
+        
+        b=0
+        #b é a variavel que determina a compra ou venda do ativo; +2=compra; -2=venda
+        
+        for _ in range(2):
+            x=x+4
+            a=random.randint(-30,30) #valorização ou desvalorização do ativo
+            y= y+a
+            if a<0:
+                color ('red')
+            else:
+                color ('blue')
+            goto(x,y)
+            if a>15:
+                b=b+1
+            if a<0:
+                b=b-1
+        if b==2:
+            l=l-y
+            v=v+1
+            t=t+1
+        elif b==-2:
+            l=l+y
+            c=c+1
+            t=t+1
+        print('lucro=' + str(l))
+    print('foram realizadas '+str(t)+' trades, sendo '+ str(v)+' vendas e ' +str(c)+' compras.')
+
+
+avanço()
