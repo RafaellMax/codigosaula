@@ -9,7 +9,7 @@ speed(1)
 
 x=0
 y=0
-b=0
+b=0 #b é a variavel que determina a compra ou venda do ativo; +2=compra; -2=venda
 l=0 #lucro
 c=0 #ativos comprados
 v=0 #ativos vendidos
@@ -21,13 +21,12 @@ def avanço (x=-300,y=0):
     c=0
     v=0
     t=c+v
-    for _ in range(75):
+    for _ in range(100):
         
         b=0
-        #b é a variavel que determina a compra ou venda do ativo; +2=compra; -2=venda
         
-        for _ in range(2):
-            x=x+4
+        for _ in range(3):
+            x=x+2
             a=random.randint(-30,30) #valorização ou desvalorização do ativo
             y= y+a
             if a<0:
@@ -35,19 +34,21 @@ def avanço (x=-300,y=0):
             else:
                 color ('blue')
             goto(x,y)
-            if a>15:
+            if a>10:
                 b=b+1
-            if a<0:
+            if a<-8:
                 b=b-1
-        if b==2:
-            l=l-y
+        
+        if b>=2:   #se as 3 iterações atingirem +2 ou mais, vende
+            l=l+y
             v=v+1
             t=t+1
-        elif b==-2:
-            l=l+y
+        elif b=<-2: #se atingir -2 ou menos, compra
+            l=l-y
             c=c+1
             t=t+1
-        print('lucro=' + str(l))
+        print('lucro=' + str(l)) #acompanha o lucro em tempo real
+        
     print('foram realizadas '+str(t)+' trades, sendo '+ str(v)+' vendas e ' +str(c)+' compras.')
 
 
