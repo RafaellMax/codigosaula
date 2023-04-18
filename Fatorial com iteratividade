@@ -1,0 +1,22 @@
+#fatorial iterativa com while
+
+def fat(n):
+    p=1
+    f=1
+    while n>1:
+        p=n*(n-1)
+        f=f*p
+        n=n-2
+    return f
+
+
+
+def fat2(n):
+    p=1
+    while n>0:
+        p=p*n
+        n=n-1
+    return p
+
+#fatorial iterativa com for
+
