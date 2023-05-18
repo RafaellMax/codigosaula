@@ -12,6 +12,9 @@
 #c.append6)
 #c.pop(1) retorna o valor da posição 1
 #c.insert
+#split: 'faz bem aaa'.split(' ')
+#dicionário: a = {'um' : 'one', 'dois' : 'two', 'tres' : 'three'}
+
 
 
 #questao 1 da lista
@@ -71,4 +74,13 @@ def retas(listas):
 
 comando=[[-0.5, 300],[0,400] ],[[0.5,  300], [-400,0]],[[-1.3, -300], [-335,0] ],[[1.3,  -300], [0,335] ]
 
-
+# histograma
+def histograma(texto):
+    d = dict()
+    for c in texto:
+        if c in d:
+            d[c]+=1
+        else:
+            d[c]=1
+        
+    return d
