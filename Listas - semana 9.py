@@ -84,3 +84,35 @@ def histograma(texto):
             d[c]=1
         
     return d
+
+#notas pelo dicionário
+
+alunos = {'joão':[4,7,8],'maria':[6,7,5],'chico':[10,9,6],'rafael':[10,2,10]}
+pesos = [0.3,0.3,0.4]
+def notas():
+    for k in alunos:
+        media=0
+        for c in range(3):
+            media+=pesos[c]*alunos[k][c]
+        print(k,media)
+        
+                 
+def media_final():
+    media_final = alunos
+    for k in alunos:
+        media=0
+        for c in range(3):
+            media+=pesos[c]*alunos[k][c]
+        media_final[k].append(media)
+    print(media_final)
+    
+def media_truncada():  # INCOMPLETA
+    a={}
+    media_final()
+    for c in range(10):
+        for a in alunos:
+            if alunos[a][3]-c <1 and alunos[a][3]-c >=0:
+                b=[alunos[a],alunos[a][4]]
+                a={c:b}
+                a[1].append(alunos[a][3])
+    print(a)
