@@ -1,0 +1,12 @@
+#TUPLAS
+
+lista = [1, 3, 'a', [1,3]]
+tupla = (12, 4, 'aaa')
+
+# a diferença é que a lista eu cnsgio mudar, a tupla é
+#imutável
+
+1, 2 = a, b #atribuição simultanea usando tuplas
+a, b = b, a
+
+
