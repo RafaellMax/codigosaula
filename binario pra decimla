@@ -1,0 +1,7 @@
+def binario(bin):
+    i=0
+    bin = '1011'
+    n=0
+    for bit in bin[::-1]: #esse [::-1]faz ir de trás pra frente
+        n+=int(bit)*(2**i)
+        i+=1
