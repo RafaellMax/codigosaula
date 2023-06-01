@@ -1,0 +1,96 @@
+#dica do eric
+class Point:
+    def __init__(self,x,y):
+        self.x=x
+        self.y=y
+
+p=Point(10,10)
+print(p.x, p.y)
+def mover(self, dx, dy):
+    self.x+=dx
+    self.y+=dy
+
+class Reta:
+    def __init__(self, p1, p2):
+        self.p1=p1
+        self.p2=p2
+    def draw(self):
+        up()
+        goto(self.p1.x, self.p1.y)
+        down()
+        goto(self.p2.x, self.p2.y)
+
+
+from turtle import *
+import math 
+import time
+import random
+
+screen = Screen()
+tracer(0, 0)
+
+setup(960,540)
+screensize(950,530)
+title('Mariu')
+
+#----------------
+
+def forma (lado):
+    width(3)
+    begin_fill()
+
+    for _ in range (30):
+        forward(lado)
+        right(12)
+
+
+import time
+tracer(0, 0)
+lado = 10
+intervalo = 30
+for i in range(intervalo):
+    reset()
+    forma(lado)
+    update()
+    time.sleep(0.1)
+    lado += random.randint(-1,1)
+
+#----------------
+
+jogador = {
+    'x':0,
+    'y':0,
+    'lado':'direita',
+    'animacao':None,
+    'counter':0
+    }
+
+def desenha_jogador(jogador):    
+    if jogador['animacao'] == 'pulando':
+        jogador_pulando(jogador)
+    ###
+    x, y = jogador['x'], jogador['y']
+    up()
+    goto(x, y)
+    down()
+    # cabeca
+    circle(10)
+    # tronco
+    goto(x, y-15)
+    ### braco / arma
+    up()
+    goto(x, y-8)
+    if jogador['lado'] == 'direita':
+        braco = +7
+    else:
+        braco = -7
+    down()
+    goto(x+braco, y-6)
+    up()
+    goto(x, y -15)
+    down()
+    # pernas
+    goto(x+10, y-15-10)
+    goto(x, y-15)
+    goto(x-10, y-15-10)
+
