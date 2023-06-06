@@ -1,26 +1,3 @@
-#dica do eric
-class Point:
-    def __init__(self,x,y):
-        self.x=x
-        self.y=y
-
-p=Point(10,10)
-print(p.x, p.y)
-def mover(self, dx, dy):
-    self.x+=dx
-    self.y+=dy
-
-class Reta:
-    def __init__(self, p1, p2):
-        self.p1=p1
-        self.p2=p2
-    def draw(self):
-        up()
-        goto(self.p1.x, self.p1.y)
-        down()
-        goto(self.p2.x, self.p2.y)
-
-
 from turtle import *
 import math 
 import time
@@ -29,42 +6,40 @@ import random
 screen = Screen()
 tracer(0, 0)
 
-setup(960,540)
-screensize(950,530)
-title('Mariu')
+#desenhar a fase
+def desenha_fase():
+    up()
+    goto(-500,-25)
+    down()
+    goto(500,-25)
 
-#----------------
+############## ESTRUTURA DE DADOS  ###########  
 
-def forma (lado):
-    width(3)
-    begin_fill()
-
-    for _ in range (30):
-        forward(lado)
-        right(12)
-
-
-import time
-tracer(0, 0)
-lado = 10
-intervalo = 30
-for i in range(intervalo):
-    reset()
-    forma(lado)
-    update()
-    time.sleep(0.1)
-    lado += random.randint(-1,1)
-
-#----------------
-
+# decida aqui o que guardar para o jogador
 jogador = {
-    'x':0,
-    'y':0,
-    'lado':'direita',
-    'animacao':None,
-    'counter':0
-    }
+    'x': 0,
+    'y': 0,
+    'lado': 'direita',
+    'animacao': None,
+    'counter': 0,
+}
 
+
+inimigos1 = []
+# decida aqui o que guardar para cada inimigo
+for _ in range(9):
+    inimigo = {
+        'x' : random.randint(0, 300),
+        'y': random.randint(0, 300),
+        'step': random.random(),
+        'size': random.random(),
+    }
+    inimigos1.append(inimigo)
+
+    
+############## ROTINAS GRAFICAS ###########
+
+# -> substitua o codigo abaixo pelo seu jogador
 def desenha_jogador(jogador):    
     if jogador['animacao'] == 'pulando':
         jogador_pulando(jogador)
@@ -93,4 +68,99 @@ def desenha_jogador(jogador):
     goto(x+10, y-15-10)
     goto(x, y-15)
     goto(x-10, y-15-10)
+
+# -> substitua o codigo abaixo 
+def jogador_pulando(jogador):
+    N = 10
+    count = jogador['counter']
+    if jogador['lado'] == 'direita':
+        step = 4
+    else:
+        step = -4
+    jogador['x'] += step
+    if count >= N:
+        jogador['counter'] = 0
+        jogador['animacao'] = False
+        return
+    if count < N/2:
+        jogador['y'] += 4
+    else:
+        jogador['y'] -= 4        
+    jogador['counter'] += 1
+
+# -> substitua o codigo abaixo 
+def desenha_inimigos():
+    # desenha inimigos1
+    for ini in inimigos1:
+        up()
+        goto(ini['x'], ini['y'])
+        down()
+        fillcolor('red')
+        begin_fill()
+        circle(ini['size'] * 8)
+        end_fill()
+    # desenha inimigos2
+    pass
+
+def desenha_jogo():
+    global jogador;
+    reset()
+    hideturtle()
+    desenha_jogador(jogador)
+    desenha_inimigos()
+    desenha_fase()
+    update()
+    
+############## LOGICA DE ANIMACAO ##########
+
+def anda(step=10):
+    jogador['x'] += step    
+
+def direita():
+    jogador['lado'] = 'direita'
+    anda(10)
+    
+def esquerda():
+    jogador['lado'] = 'esquerda'
+    anda(-10)
+
+def pula():
+    jogador['animacao'] = 'pulando'
+
+############## TECLAS do JOGADOR
+
+screen.onkey(direita, "Right")
+screen.onkey(esquerda, "Left")
+screen.onkey(pula, "Up")
+screen.listen()
+
+############## LOGICA DE ANIMACAO - inimigo 1 ##########
+
+# -> substitua o codigo abaixo 
+def anima_inimigo1(ini):
+    s = ini['step']
+    folga = 20
+    if ini['x'] < jogador['x']+folga:
+        step_x = s
+    else:
+        step_x = -s
+    if ini['y'] < jogador['y'] + folga:
+        step_y = s
+    else:
+        step_y = -s
+    ini['x'] += step_x
+    ini['y'] += step_y    
+
+def anima_todos_inimigos():
+    for ini in inimigos1:
+        anima_inimigo1(ini)
+        
+
+############### LOOP PRINCIPAL
+
+
+for i in range(3000):
+    anima_todos_inimigos()
+    desenha_jogo()    
+    time.sleep(0.01)
 
