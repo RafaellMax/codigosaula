@@ -1,3 +1,8 @@
+
+#terminar de construir a primeira fase, com as plataformas etc
+# pra dps pensar nos inimigos, e depois pensar nas fases seguintes, assim como no menu inicial
+
+
 from turtle import *
 import math 
 import time
@@ -7,24 +12,224 @@ screen = Screen()
 tracer(0, 0)
 
 #desenhar a fase
-def desenha_fase():
+
+def quadrado(lado=30): #desenha um quadrado
+    width(3)
+    begin_fill()
+    seth(0)
+    for _ in range(4):
+        forward(lado)
+        right(90)
+
+    end_fill()
+def bloquinhos (x,y,n, lado=30): #constroi uma paredinha de n bloquinhos
+    pensize(4)
+    color("black","orange")
     up()
-    goto(-500,-25)
+    goto(x,y)
     down()
-    goto(500,-25)
+    for _ in range(n):
+        quadrado(lado)
+        forward(lado)
+    up()
+def retangulo(x,y,l=20,h=50):
+    seth(0)
+    up()
+    goto(x,y)
+    down()
+    color('red','blue')
+    forward(l)
+    left(90)
+    forward(h)
+    left(90)
+    forward(l)
+    left(90)
+    forward(h)
+
+def acrescenta_dict(dicio, k, v):
+    if k not in dicio:
+        dicio[str(k)] = v
+    elif type(dicio[str(k)]) == list:
+        dicio[str(k)].append(v)
+    else:
+        dicio[str(k)] = [dicio[str(k)], v]
+
+#fase 1
+def desenha_fase(fase=1):
+    def desenha_arbusto(tamanho,x,y=-25):
+            pensize(1)
+            up()
+            goto(x,y)
+            down()
+            color('#4a781b','#4dce06')
+            begin_fill()
+            seth(0)
+            forward(tamanho*5)
+            left(120)
+            forward(tamanho/2)
+            seth(95)
+            left(80)
+            forward(tamanho/2)
+            right(60)
+            forward(tamanho-2)
+            for _ in range(4):
+                left(20)
+                forward(tamanho/4)
+            left(30)
+            forward(tamanho*(3/4))
+            right(120)
+            forward(tamanho)
+            for _ in range(4):
+                left(20)
+                forward(tamanho/4)
+            left(30)
+            forward(tamanho/2)
+            left(30)
+            forward(tamanho)
+            left(10)
+            forward(tamanho)
+            end_fill()
+            up()
+            seth(0)
+    def desenha_nuvem(tamanho,x,y):
+            pensize(3)
+            up()
+            goto(x,y)
+            down()
+            color('#76cedd','white')
+            begin_fill()
+            seth(0)
+            forward(tamanho*5)
+            left(120)
+            forward(tamanho/2)
+            seth(95)
+            left(80)
+            forward(tamanho/2)
+            right(60)
+            forward(tamanho-2)
+            for _ in range(4):
+                left(20)
+                forward(tamanho/4)
+            left(30)
+            forward(tamanho*(3/4))
+            right(120)
+            forward(tamanho)
+            for _ in range(4):
+                left(20)
+                forward(tamanho/4)
+            left(30)
+            forward(tamanho/2)
+            left(30)
+            forward(tamanho)
+            left(10)
+            forward(tamanho)
+            end_fill()
+            up()
+            seth(0)
+    def cria_plataforma(x,y,n=5):
+        bloquinhos(x,y,n)
+        acrescenta_dict(plataformas,y,x)
+    
+    if fase == 1:
+        
+        #céu
+        color('#76cedd','#76cedd')
+        up()
+        goto(-500,-25)
+        down()
+        begin_fill()
+        goto(-500,1000)
+        goto(500,1000)
+        goto(500,-25)
+        goto(-500,-25)
+        end_fill()
+
+        #nuvens
+        desenha_nuvem(10,-200,200)    
+        desenha_nuvem(30,200,60)
+        desenha_nuvem(40,-300,70)
+        desenha_nuvem(20,400,100)
+        desenha_nuvem(10,200,250)  
+        desenha_nuvem(10,50,300)  
+
+        #arbustos
+        desenha_arbusto(10,-400)
+        desenha_arbusto(8,-40)
+        desenha_arbusto(10,200)
+        desenha_arbusto(8,370)
+
+        #plataformas
+        cria_plataforma(-300,50)
+        cria_plataforma(0,100)
+
+        #chão
+        pencolor('brown')
+        color('green','#ad580d')
+        pensize(20)
+        up()
+        goto(-550,-35)
+        down()
+        begin_fill()
+        goto(550,-35)
+        goto(550,-975)
+        goto(-550,-975)
+        goto(-550,-35)
+        end_fill()
+        #
+
+        #bordas
+        pensize(3)
+        #esquerda
+        pencolor('black')
+        color('black','black')
+        begin_fill()
+        up()
+        goto(-500,1000)
+        down()
+        goto(-500,-1000)
+        goto(-1000,-1000)
+        goto(-1000,1000)
+        goto(-500,1000)
+        up()
+        end_fill()
+        #direita
+        begin_fill()
+        up()
+        goto(500,1000)
+        down()
+        goto(500,-1000)
+        goto(1000,-1000)
+        goto(1000,1000)
+        goto(500,1000)
+        up()
+        end_fill()
+        #baixo
+        up()
+        goto(-500,-200)
+        down()
+        begin_fill()
+        color('black','black')
+        goto(-500,-1000)
+        goto(500,-1000)
+        goto(500,-200)
+        goto(-500,-200)
+        end_fill()
+
 
 ############## ESTRUTURA DE DADOS  ###########  
 
 # decida aqui o que guardar para o jogador
 jogador = {
-    'x': 0,
+    'x': -450,
     'y': 0,
     'lado': 'direita',
     'animacao': None,
     'counter': 0,
+    'plataforma': True,
 }
 
-
+plataformas = {}
+fase=1
 inimigos1 = []
 # decida aqui o que guardar para cada inimigo
 for _ in range(9):
@@ -40,53 +245,84 @@ for _ in range(9):
 ############## ROTINAS GRAFICAS ###########
 
 # -> substitua o codigo abaixo pelo seu jogador
-def desenha_jogador(jogador):    
+def desenha_jogador(jogador):
+    jogador_gravidade(jogador)  
+    pensize(1)
     if jogador['animacao'] == 'pulando':
         jogador_pulando(jogador)
+    retangulo(jogador['x'],jogador['y'])
     ###
-    x, y = jogador['x'], jogador['y']
-    up()
-    goto(x, y)
-    down()
+    #x, y = jogador['x'], jogador['y']
+    #up()
+    #goto(x, y)
+    #down()
     # cabeca
-    circle(10)
+    #circle(10)
     # tronco
-    goto(x, y-15)
+    #goto(x, y-15)
     ### braco / arma
-    up()
-    goto(x, y-8)
-    if jogador['lado'] == 'direita':
-        braco = +7
-    else:
-        braco = -7
-    down()
-    goto(x+braco, y-6)
-    up()
-    goto(x, y -15)
-    down()
+    #up()
+    #goto(x, y-8)
+    #if jogador['lado'] == 'direita':
+    #    braco = +7
+    #else:
+    #    braco = -7
+    #down()
+    #goto(x+braco, y-6)
+    #up()
+    #goto(x, y -15)
+    #down()
     # pernas
-    goto(x+10, y-15-10)
-    goto(x, y-15)
-    goto(x-10, y-15-10)
+    #goto(x+10, y-15-10)
+    #goto(x, y-15)
+    #goto(x-10, y-15-10)
 
 # -> substitua o codigo abaixo 
 def jogador_pulando(jogador):
     N = 10
     count = jogador['counter']
-    if jogador['lado'] == 'direita':
-        step = 4
-    else:
-        step = -4
-    jogador['x'] += step
+    #if jogador['lado'] == 'direita':
+    #    step = 20
+    #else:
+    #    step = -20
+    #jogador['x'] += step
     if count >= N:
-        jogador['counter'] = 0
+        jogador['counter'] = 0 #usar o counter pra parar a queda em obstáculos
         jogador['animacao'] = False
         return
-    if count < N/2:
-        jogador['y'] += 4
+    if count < N:
+        jogador['plataforma']=False
+        jogador['counter'] += 1
+        jogador['y'] +=10
     else:
-        jogador['y'] -= 4        
-    jogador['counter'] += 1
+      # jogador['y'] -= 4
+        jogador['counter'] += 1
+
+
+
+################### GRAVIDADE #################
+#o pulo e a gravidade aumentam 1p 20 vezes e 10p de uma vez; por isso os elementos de colisao devem ser dispostos em intervalos de 10x
+def jogador_gravidade(jogador):
+    if jogador['y']== 50:
+        if-319 < jogador['x'] < -131: #é bom ter uma tolerancia de 19p alem dos limites da plataforma, pra cair só qnd o corpo inteiro estiver fora
+            jogador['plataforma']=True
+        else:
+            jogador['plataforma']=False
+    if jogador['plataforma']==False and jogador['animacao']== False:
+        jogador['y']-= 10
+    if jogador['y']<0:
+        jogador['y']=0
+        jogador['plataforma']=True
+    for k in plataformas: #AINDA NAO TA FUNCIONANDO USAR DICIONARIO PRA ESTEBELECAR LIMITES DAS PLATAFORMAS
+        for plat in k:
+            if int(k)>0:
+                if int(k)+3 < jogador['y'] < int(k) and int(plat)+ 150 > jogador['x'] and jogador['x']> int(plat):
+                   jogador['plataforma']=True
+            if int(k)<0:
+                if int(k)+3 < jogador['y'] < int(k) and int(plat)+ 150 < jogador['x'] and jogador['x']< int(plat):
+                   jogador['plataforma']=True
+    
+
 
 # -> substitua o codigo abaixo 
 def desenha_inimigos():
@@ -106,33 +342,60 @@ def desenha_jogo():
     global jogador;
     reset()
     hideturtle()
+    desenha_fase()
     desenha_jogador(jogador)
     desenha_inimigos()
-    desenha_fase()
     update()
-    
-############## LOGICA DE ANIMACAO ##########
 
-def anda(step=10):
-    jogador['x'] += step    
 
-def direita():
-    jogador['lado'] = 'direita'
-    anda(10)
-    
-def esquerda():
-    jogador['lado'] = 'esquerda'
-    anda(-10)
 
-def pula():
-    jogador['animacao'] = 'pulando'
 
-############## TECLAS do JOGADOR
 
-screen.onkey(direita, "Right")
-screen.onkey(esquerda, "Left")
-screen.onkey(pula, "Up")
-screen.listen()
+############## LOGICA DE ANIMACAO ########################
+########### MOVIMENTAÇÃO E TECLAS DO JOGADOR #############
+teclas={'direita':False,'esquerda':False}
+def movimentacao():
+    def anda(step=10):
+        jogador['x'] += step    
+
+    def direita():
+        jogador['lado'] = 'direita'
+        anda()
+        
+    def esquerda():
+        jogador['lado'] = 'esquerda'
+        anda(-10)
+
+    def pula():
+        if jogador['plataforma']==True:
+            jogador['animacao'] = 'pulando' 
+
+    if teclas['direita']==True and teclas['esquerda']==False:
+        direita()
+    if teclas['esquerda']==True and teclas['direita']==False:
+        esquerda()
+    def cancela_d():
+        teclas['direita']=False
+    def cancela_e():
+        teclas['esquerda']=False
+    def ativa_d():
+        teclas['direita']=True
+    def ativa_e():
+        teclas['esquerda']=True
+    #def cancela_pulo():
+    #    if jogador['counter']>4:
+    #        jogador['animacao']=False
+    #        jogador['counter']=0
+    screen.onkey(cancela_d,'Right')
+    screen.onkey(cancela_e,'Left')
+    screen.onkeypress(ativa_d, "Right")
+    screen.onkeypress(ativa_e, "Left")
+    screen.onkeypress(pula, "Up")
+    #screen.onkey(cancela_pulo, "Up") #nao funcionou, tentar botar um condicional na animacao do pulo relacionada a uma flag da tecla 'up'
+    screen.listen()
+
+
+
 
 ############## LOGICA DE ANIMACAO - inimigo 1 ##########
 
@@ -161,6 +424,7 @@ def anima_todos_inimigos():
 
 for i in range(3000):
     anima_todos_inimigos()
-    desenha_jogo()    
+    desenha_jogo()
+    movimentacao()    
     time.sleep(0.01)
-
+    print(plataformas,'x='+str(jogador['x'])+' e y='+str(jogador['y'])+str(jogador['counter']))
