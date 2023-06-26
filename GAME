@@ -1,16 +1,15 @@
-
-#inimigos, e depois pensar nas fases seguintes, assim como no menu inicial
-#adicionar a opcao de correr
-#ajustar a cor de cada roupa (powerup)
-#mecanica de tiro
-#bordas pro jogador
+#bordas pro jogador (preciso deisso pra fase2)
 #adicionar tolerancia às plataformas (dps aos itens se der tempo)   
+# aumentar precisao dos tiros(pra isso eu preciso saber como vai ser o modelo da bola de fogo)
+#aumentar os elementos do hud
 ############### criterios do eric ####################
-# Iniciar com P, desligar com Q
-# Uma barra de energia que diminui (Já fiz, com a barra de vida)
-# Mecanica de tiro para eliminar inimigos
+# desligar com Q
 # 2 tipos de inimigos diferentes
 # Cada inimigo precisa ter uma rotina de movimentacao diferente com IF, q muda sua maneira de andar
+### caprichos ###
+# suavizar a gravidade
+# bracinho tacando a bola de fogo
+# tolerancia pra pegar os itens
 
 
 from turtle import *
@@ -367,6 +366,9 @@ chave={
 }
 itens1 = [florzinha,chave]
 
+
+
+
 ######################################################
 ############### COLISAO COM OS INIMIGOS ###############
 def encosta_inimigo(ini):     #qnd atingido por um inimigo, o jogador entra em estado de protecao por um tempo ate poder ter vida reduzida novamente
@@ -395,12 +397,15 @@ def bola_de_fogo():
 def encosta_fogo(ini):
     if ini['vivo']==True:
         for proj in projeteis:
-                if ini['x']<= proj['x'] <= ini['x']+ini['largura'] and ini['y']<=proj['y'] <= ini['y']+ini['altura']:
-                    proj['contador']=0
-                    ini['vivo']=False
+                if proj['contador']>0:
+                    if ini['x']<= proj['x'] <= ini['x']+ini['largura'] and ini['y']<=proj['y'] <= ini['y']+ini['altura']:
+                        proj['contador']=0
+                        ini['vivo']=False
+
+
+
 
 ############## ROTINAS GRAFICAS ###########
-
 ########### HUD #################
 def desenha_vida():
     
@@ -415,15 +420,14 @@ def desenha_hud():
 def desenha_projeteis():
     for projetil in projeteis:
         if projetil['lado']=='direita' and projetil['contador']>0:
-            up()
-            goto(projetil['x'],projetil['y'])
-            seth(0)
-            down()
             begin_fill()
             color('red','orange')
-            pensize(4)
-            circle(10)
-            retangulo(projetil['x'],projetil['y'],10,10)
+            retangulo(projetil['x'],projetil['y']+5,10,10)
+            end_fill()
+        if projetil['lado']=='esquerda' and projetil['contador']>0:
+            begin_fill()
+            color('red','orange')
+            retangulo(projetil['x'],projetil['y']+5,10,10)
             end_fill()
 
 def desenha_jogador(jogador): #o bonequinho é de 18x38
@@ -438,12 +442,18 @@ def desenha_jogador(jogador): #o bonequinho é de 18x38
     goto(x, y)
     down()
 
-    poder1, poder2 = 'blue','blue'
+    avental1, avental2 = 'blue','blue'
+    camiseta1,camiseta2 = 'red','red'
+    chapeu1,chapeu2 = 'red','red'
+    chapeu3,chapeu4 = 'white','yellow'
     if florzinha['vivo']==False:
-        poder1,poder2 = 'orange','red'
+        avental1,avental2 = 'orange','red'
+        camiseta1,camiseta2 = 'orange','white'
+        chapeu1,chapeu2= 'orange','white'
+        chapeu3,chapeu4 = 'red','red'
     
     #corpinho
-    color(poder1,poder2)  #uniforme muda se ele tem poder ou nao
+    color(avental1,avental2)  #uniforme muda se ele tem poder ou nao
     retangulo(x,y+10,15,15)
     end_fill() 
     #perninhas
@@ -454,17 +464,18 @@ def desenha_jogador(jogador): #o bonequinho é de 18x38
     retangulo(x,y,8,3)
     retangulo(x+10,y,8,3)
     #camiseta
-    color('red','red')
+    color(camiseta1,camiseta2)
     retangulo(x+6,y+20,7,5)
-    retangulo(x,y+17,3,8)
+    retangulo(x-1,y+17,3,8)
     #botõezinhos
     color('yellow','yellow')
     retangulo(x+5,y+15,1,1)
     retangulo(x+13,y+15,1,1)
     #mãozinha
+    color('grey','white')
+    retangulo(x-1,y+14,3,3)
+    #cabeça 
     color('#F3BEB3','#F3BEB3')
-    retangulo(x,y+14,3,3)
-    #cabeça (mesma cor da mão #F3BEB3)
     retangulo(x+1,y+25,12,12)
     #cabelo #301E1A
     color('#301E1A','#301E1A')
@@ -478,9 +489,9 @@ def desenha_jogador(jogador): #o bonequinho é de 18x38
     retangulo(x+7, y+27,2,2)
     retangulo(x+5, y+27,9,1)
     #chapeu
-    color('red','red')
+    color(chapeu1, chapeu2)
     retangulo(x-1,y+35,16,3)
-    color('white','yellow')
+    color(chapeu3,chapeu4)
     retangulo(x+10,y+36,1,1)
 def jogador_pulando(jogador):
     N = 15
@@ -532,9 +543,10 @@ def desenha_inimigos(fase):
     # desenha inimigos1
     if fase==1:
         for ini in inimigos1:
-            anima_inimigo1(ini)
-            color('black','#7F3626')
-            retangulo(ini['x'],ini['y'],20,20)
+            if ini['vivo']==True:
+                anima_inimigo1(ini)
+                color('black','#7F3626')
+                retangulo(ini['x'],ini['y'],20,20)
     pass
 
 def desenha_jogo():
@@ -554,9 +566,8 @@ def desenha_jogo():
 
 ########### MOVIMENTAÇÃO E TECLAS DO JOGADOR #############
 teclas={'direita':False,'esquerda':False}
-step=5*jogador['correndo']
 def movimentacao():
-    global step
+    step=5*jogador['correndo']
     def anda(step):
         jogador['x'] += step    
 
@@ -586,7 +597,7 @@ def movimentacao():
         teclas['esquerda']=True
     def correr():
         if jogador['animacao']==False:
-            jogador['correndo']=2
+            jogador['correndo']=1.5
     def andar():
         if jogador['animacao']==False:
             jogador['correndo']=1
@@ -599,6 +610,10 @@ def movimentacao():
     def parar():
         global fase
         fase = 'tela final'
+    def cheat(): ## funcao dev pra testar as coisas mais facilmente ## ta bindada à tecla 'd'
+        jogador['correndo']=3
+        florzinha['vivo']=False
+        chave['vivo']=False
     screen.onkey(cancela_d,'Right')
     screen.onkey(cancela_e,'Left')
     screen.onkeypress(ativa_d, "Right")
@@ -610,6 +625,7 @@ def movimentacao():
     screen.onkeypress(iniciar,'p')
     screen.onkeypress(parar,'q')
     screen.onkeypress(bola_de_fogo,'space')
+    screen.onkeypress(cheat,'d')
     screen.listen()
     
 ############## LOGICA DE ANIMACAO #######################
@@ -628,7 +644,7 @@ def barreiras_inimigos():
             if ini['x']<-500:
                 ini['lado']='direita'
         if ini['lado']=='direita': #borda esquerda
-            if ini['x']>500:
+            if ini['x']>500-ini['largura']:
                 ini['lado']='esquerda'
 
 def anima_todos_inimigos(): #verifica a colisao tanto de ini quanto de items
@@ -658,6 +674,19 @@ def anima_projeteis():
             end_fill()
             projetil['x']+=20
             projetil['contador']-=1
+        if projetil['lado']=='esquerda' and projetil['contador']>0:
+            up()
+            goto(projetil['x']-5,projetil['y'])  # ATENCAO AO OFFSET NA ESQUERDA
+            seth(0)
+            down()
+            begin_fill()
+            color('red','orange')
+            pensize(4)
+            circle(5)
+            retangulo(projetil['x'],projetil['y'])
+            end_fill()
+            projetil['x']-=20
+            projetil['contador']-=1
         if projetil['contador']==0:
             del projetil #ainda nao consigo deletar os projeteis - mas isso n importa (era mais pra melhorar performance do jogo)
 
@@ -672,4 +701,3 @@ for i in range(3000):
     desenha_hud()
     movimentacao()    
     time.sleep(0.01)
-    print(jogador)
