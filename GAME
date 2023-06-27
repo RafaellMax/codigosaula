@@ -1,11 +1,7 @@
-#bordas pro jogador (preciso deisso pra fase2)
-#adicionar tolerancia às plataformas (dps aos itens se der tempo)   
-# aumentar precisao dos tiros(pra isso eu preciso saber como vai ser o modelo da bola de fogo)
+#adicionar tolerancia aos itens se der tempo
 #aumentar os elementos do hud
 ############### criterios do eric ####################
 # desligar com Q
-# 2 tipos de inimigos diferentes
-# Cada inimigo precisa ter uma rotina de movimentacao diferente com IF, q muda sua maneira de andar
 ### caprichos ###
 # suavizar a gravidade
 # bracinho tacando a bola de fogo
@@ -16,8 +12,9 @@ from turtle import *
 import math 
 import time
 import random
+from sys import exit
 screen = Screen()
-screen.setup(1600,900)
+screen.setup(1400,800)
 tracer(0, 0)
 
 #desenhar a fase + formas gerais
@@ -130,6 +127,41 @@ def desenha_fase(fase=1):
             end_fill()
             up()
             seth(0)
+    def desenha_montanha(tamanho,x,y=0):
+            pensize(1)
+            up()
+            goto(x,y)
+            down()
+            color('#662314','#ad580d')
+            begin_fill()
+            seth(0)
+            forward(tamanho*5)
+            left(120)
+            forward(tamanho/2)
+            seth(95)
+            left(80)
+            forward(tamanho/2)
+            right(60)
+            forward(tamanho-2)
+            for _ in range(4):
+                left(20)
+                forward(tamanho/4)
+            left(30)
+            forward(tamanho*(3/4))
+            right(120)
+            forward(tamanho)
+            for _ in range(4):
+                left(20)
+                forward(tamanho/4)
+            left(30)
+            forward(tamanho/2)
+            left(30)
+            forward(tamanho)
+            left(10)
+            forward(tamanho)
+            end_fill()
+            up()
+            seth(0)
     def desenha_nuvem(tamanho,x,y):
             pensize(3)
             up()
@@ -170,22 +202,16 @@ def desenha_fase(fase=1):
         acrescenta_dict(plataformas,y,x,n)
 
     if fase=='menu':
-        screen.bgcolor='#76cedd'
+        bgcolor='#76cedd'
         write('menu inicial - aperte P para começar!')
+        plataformas={}
+        projeteis=[]
     
     if fase == 1:
         
         #céu
         color('#76cedd','#76cedd')
-        up()
-        goto(-500,-25)
-        down()
-        begin_fill()
-        goto(-500,1000)
-        goto(500,1000)
-        goto(500,-25)
-        goto(-500,-25)
-        end_fill()
+        retangulo(-600,0,1200,500)
 
         #nuvens
         desenha_nuvem(10,-200,200)    
@@ -256,60 +282,83 @@ def desenha_fase(fase=1):
         cria_plataforma(-300,300)
         cria_plataforma(250,260)
         
-
-        #chão
-        pencolor('brown')
-        color('green','#ad580d')
-        pensize(20)
-        up()
-        goto(-550,-10)
-        down()
-        begin_fill()
-        goto(550,-10)
-        goto(550,-975)
-        goto(-550,-975)
-        goto(-550,-10)
-        end_fill()
         #
+        #chão
+        color('#ad580d','#ad580d')
+        retangulo(-600,-300,1200,300,)
+        color('#112F05','green')
+        retangulo(-600,-30,1200,30)
+        #
+        #bordas
+        color('black','black')
+        retangulo(-1000,-500,500,1000)
+        retangulo(500,-500,500,1000)
+        retangulo(-500,-500,1000,300)
+
+    if fase ==2:
+        #ceu
+        color('#76cedd','#76cedd')
+        retangulo(-600,0,1200,500)
+        cria_plataforma(-600,0,40)
+
+
+        #nuvens
+        desenha_nuvem(10,-300,200)    
+        desenha_nuvem(30,100,60)
+        desenha_nuvem(40,-400,70)
+        desenha_nuvem(20,300,100)
+        desenha_nuvem(10,100,250)  
+        desenha_nuvem(10,-50,300)
+        desenha_nuvem(5,-50,400)
+        desenha_nuvem(5,120,350)
+        desenha_nuvem(5,-320,350)
+        desenha_nuvem(7,-420,300)
+        desenha_nuvem(5,-520,250)
+        desenha_nuvem(50,340,200)
+        desenha_nuvem(40,240,100)
+        
+        #montanhas
+        desenha_montanha(40,400)
+        desenha_montanha(20,250)
+        desenha_montanha(11,130)
+        desenha_montanha(10,100)
+        desenha_montanha(5,0)
+          
+
+        #arbustos
+        desenha_arbusto(10,-400)
+        desenha_arbusto(8,-40)
+        desenha_arbusto(10,200)
+        desenha_arbusto(8,370)
+         #castelo
+        color('black','grey')
+        retangulo(450,0,200,400)
+        cria_plataforma(350,250,5)
+        porta='#C6A579'
+        if fase2['clear']==True:
+            porta = 'black'
+        color('black',porta)
+        retangulo(475,250,100,50)
+        color('black','grey')
+        pensize(0)
+        retangulo(350,220,200,30)
+        #chao
+        color('#ad580d','#ad580d')
+        retangulo(-600,-300,1200,300,)
+        color('#112F05','green')
+        retangulo(-600,-30,1200,30)
+       
+        #plataformas
+        cria_plataforma(-340,100,2)
+        cria_plataforma(-165,200,2)
+        cria_plataforma(55,210,3)
 
         #bordas
-        pensize(3)
-        #esquerda
-        pencolor('black')
         color('black','black')
-        begin_fill()
-        up()
-        goto(-500,1000)
-        down()
-        goto(-500,-1000)
-        goto(-1000,-1000)
-        goto(-1000,1000)
-        goto(-500,1000)
-        up()
-        end_fill()
-        #direita
-        begin_fill()
-        up()
-        goto(500,1000)
-        down()
-        goto(500,-1000)
-        goto(1000,-1000)
-        goto(1000,1000)
-        goto(500,1000)
-        up()
-        end_fill()
-        #baixo
-        up()
-        goto(-500,-200)
-        down()
-        begin_fill()
-        color('black','black')
-        goto(-500,-1000)
-        goto(500,-1000)
-        goto(500,-200)
-        goto(-500,-200)
-        end_fill()
-
+        retangulo(-1000,-500,500,1000)
+        retangulo(500,-500,500,1000)
+        retangulo(-500,-500,1000,300)
+        
 
 ############## ESTRUTURA DE DADOS  ###########  
 
@@ -321,21 +370,26 @@ jogador = {
     'animacao': None,
     'counter': 0,
     'plataforma': True,
-    'correndo': 1, #alternar entre 1 e 2 pra multiplar o step
+    'correndo': 2, #alternar entre 2 e 3 pra multiplar o step
     'powerup':False,
     'vidas':3,
     'protection':False, #protecao logo apos tomar um hit de um inimigo
     'protection_counter':0,
     'contador_fogo':0,
+    'barreira_d':False,
+    'barreira_e':False,
 }
 
 projeteis=[]
 plataformas = {}
-fase='menu'
-fase1={'powerup':True, 'chave':True}
+fase=2
+fase1={'clear':False,'powerup':True, 'chave':True}
+fase2={
+    'clear':False
+}
 # decida aqui o que guardar para cada inimigo
 goomba1 = {
-    'step':4,
+    'step':5,
     'vivo':True,
     'x':400,
     'y':0,
@@ -353,16 +407,70 @@ goomba2 = {
     'altura':20,
 }
 inimigos1 = [goomba1,goomba2]
-
+guardiao1 = {
+    'x':400,
+    'y':0,
+    'step':1,
+    'lado':'esquerda',
+    'largura':50,
+    'altura':40,
+    'vivo':True,
+    'velocidade':0.5
+}
+guardiao3 = {
+    'x':400,
+    'y':0,
+    'step':1,
+    'lado':'esquerda',
+    'largura':30,
+    'altura':60,
+    'vivo':True,
+    'velocidade':0.7
+}
+guardiao4 = {
+    'x':400,
+    'y':0,
+    'step':1,
+    'lado':'esquerda',
+    'largura':20,
+    'altura':20,
+    'vivo':True,
+    'velocidade':1
+}
+guardiao2 = {
+    'x':400,
+    'y':0,
+    'step':1,
+    'lado':'esquerda',
+    'largura':30,
+    'altura':20,
+    'vivo':True,
+    'velocidade':1
+}
+guardiao5 = {
+    'x':400,
+    'y':0,
+    'step':1,
+    'lado':'esquerda',
+    'largura':20,
+    'altura':20,
+    'vivo':True,
+    'velocidade':2
+}
+inimigos2 = [guardiao1, guardiao2,guardiao3, guardiao4, guardiao5]
 florzinha={
     'x': -225,
     'y': 300,
     'vivo':True,
+    'largura':20,
+    'altura':30,
 }
 chave={
     'x': 325,
     'y': 260,
     'vivo':True,
+    'largura':30,
+    'altura':20,
 }
 itens1 = [florzinha,chave]
 
@@ -381,12 +489,12 @@ def encosta_inimigo(ini):     #qnd atingido por um inimigo, o jogador entra em e
         if ini['y']-38 < jogador['y'] < ini['y']+ini['altura']:
             if ini['x']-18 < jogador['x'] < ini['x']+ini['largura']:
                 jogador['vidas']-=1
-                jogador['protection_counter']=30
+                jogador['protection_counter']=60
                 jogador['protection']=True
     
 ############# colisao com itens
 def encosta_item(item):
-    if jogador['x'] == item['x'] and jogador['y'] == item['y']:
+    if item['x'] < jogador['x'] <=item['x']+item['largura'] and item['y']<=jogador['y'] <= item['y']:
         item['vivo']=False
 
 ############ BOLA DE FOGO ################
@@ -494,13 +602,8 @@ def desenha_jogador(jogador): #o bonequinho é de 18x38
     color(chapeu3,chapeu4)
     retangulo(x+10,y+36,1,1)
 def jogador_pulando(jogador):
-    N = 15
+    N = 6
     count = jogador['counter']
-    #if jogador['lado'] == 'direita':
-    #    step = 20
-    #else:
-    #    step = -20
-    #jogador['x'] += step
     if count >= N:
         jogador['counter'] = 0 #usar o counter pra parar a queda em obstáculos
         jogador['animacao'] = False
@@ -508,7 +611,7 @@ def jogador_pulando(jogador):
     if count < N:
         jogador['plataforma']=False
         jogador['counter'] += 1
-        jogador['y'] +=10
+        jogador['y'] +=20
     else:
       # jogador['y'] -= 4
         jogador['counter'] += 1
@@ -526,14 +629,14 @@ def jogador_gravidade(jogador):
 def ver_plataforma(): ##### avalia de maneira generica onde tem plataforma e altera o parametro 'plataforma' de acordo com isso
     for y, plat in plataformas.items(): 
         if int(plat[0])>0:
-            if jogador['y'] == int(y) and int(plat[0])+int(plat[1])*30 >= jogador['x'] >= int(plat[0]):
+            if jogador['y'] == int(y) and int(plat[0])+int(plat[1])*30 >= jogador['x'] >= int(plat[0]-18):
                jogador['plataforma']=True
-            elif jogador['y'] == int(y) and jogador['x'] not in (int(plat[0]),int(plat[0])+int(plat[1])*30):
+            elif jogador['y'] == int(y) and jogador['x'] not in (int(plat[0]-18),int(plat[0])+int(plat[1])*30):
                 jogador['plataforma']=False
         if int(plat[0])<0:
-            if jogador['y'] == int(y) and int(plat[0]) <= jogador['x'] <= int(plat[0])+int(plat[1]*30):
+            if jogador['y'] == int(y) and int(plat[0]-18) <= jogador['x'] <= int(plat[0])+int(plat[1]*30):
                 jogador['plataforma']=True  
-            elif jogador['y'] == int(y) and  jogador['x'] not in (int(plat[0]),int(plat[0])+int(plat[1]*30)):
+            elif jogador['y'] == int(y) and  jogador['x'] not in (int(plat[0]-18),int(plat[0])+int(plat[1]*30)):
                 jogador['plataforma']=False
 ##############################################
 
@@ -547,10 +650,30 @@ def desenha_inimigos(fase):
                 anima_inimigo1(ini)
                 color('black','#7F3626')
                 retangulo(ini['x'],ini['y'],20,20)
+    if fase ==2:
+        for ini in inimigos2:
+            if ini['vivo']==True:
+                olho='white'
+                if ini['step']==2:
+                    olho='red'
+                color('black','purple')
+                pensize(0)
+                retangulo(ini['x'],ini['y']+4,ini['largura'],ini['altura']-4)
+                retangulo(ini['x'],ini['y'],3,4)
+                retangulo(ini['x']+ini['largura']-3,ini['y'],3,4)
+                pensize(2)
+                color('black',olho)
+                retangulo(ini['x']+ini['largura']/4,ini['altura']/2,ini['largura']/2,ini['largura']/2)
+                color('black','black')
+                if ini['lado']=='esquerda':
+                    retangulo(ini['x']+ini['largura']/4,5*ini['altura']/9,ini['largura']/4,ini['largura']/4)
+                else:
+                    retangulo(ini['x']+2*ini['largura']/4,5*ini['altura']/9,ini['largura']/4,ini['largura']/4)
+
     pass
 
-def desenha_jogo():
-    global jogador;
+def desenha_jogo(): 
+    global jogador
     reset()
     hideturtle()
     desenha_fase(fase)
@@ -567,17 +690,20 @@ def desenha_jogo():
 ########### MOVIMENTAÇÃO E TECLAS DO JOGADOR #############
 teclas={'direita':False,'esquerda':False}
 def movimentacao():
+    barreira_jogador() ### limites da fase para o jogador (varia de acordo com a fase e seu estagio)
     step=5*jogador['correndo']
     def anda(step):
         jogador['x'] += step    
 
     def direita():
         jogador['lado'] = 'direita'
-        anda(step)
+        if jogador['barreira_d']==False:
+            anda(step)
         
     def esquerda():
         jogador['lado'] = 'esquerda'
-        anda(step*(-1))
+        if jogador['barreira_e']==False:
+            anda(step*(-1))
 
     def pula():
         if jogador['plataforma']==True:
@@ -597,10 +723,10 @@ def movimentacao():
         teclas['esquerda']=True
     def correr():
         if jogador['animacao']==False:
-            jogador['correndo']=1.5
+            jogador['correndo']=3
     def andar():
         if jogador['animacao']==False:
-            jogador['correndo']=1
+            jogador['correndo']=2
     def cair():
         jogador['plataforma']=False
     def iniciar():
@@ -609,7 +735,11 @@ def movimentacao():
             fase=1
     def parar():
         global fase
-        fase = 'tela final'
+        if fase == 'menu':
+            quit(1)
+        else: 
+            fase = 'menu'
+        
     def cheat(): ## funcao dev pra testar as coisas mais facilmente ## ta bindada à tecla 'd'
         jogador['correndo']=3
         florzinha['vivo']=False
@@ -637,7 +767,16 @@ def anima_inimigo1(ini):
         ini['x']-=ini['step']
     if ini['lado']=='direita':  
         ini['x']+=ini['step']
+def anima_inimigo2(ini):
+    barreiras_inimigos()
+    if ini['lado']=='esquerda':  
+        ini['x']-=5*ini['step']*ini['velocidade']
+    if ini['lado']=='direita':  
+        ini['x']+=5*ini['step']*ini['velocidade']
+    #add pulo
+    
 
+    
 def barreiras_inimigos():
     for ini in inimigos1:
         if ini['lado']=='esquerda': #borda esquerda
@@ -647,6 +786,71 @@ def barreiras_inimigos():
             if ini['x']>500-ini['largura']:
                 ini['lado']='esquerda'
 
+     ############           
+    for ini in inimigos2:
+        if ini['lado']=='esquerda': #borda esquerda
+            if ini['x']<-500:
+                ini['lado']='direita'
+        if ini['lado']=='direita': #borda esquerda
+            if ini['x']>450-ini['largura']:
+                ini['lado']='esquerda'
+
+        if jogador['y']-ini['y']<150:
+            if ini['x']+150 >= jogador['x']>=ini['x']-150:
+                if jogador['x']>ini['x']:
+                    ini['lado'] = 'direita'
+                else:
+                    ini['lado']='esquerda'
+                ini['step']=2
+            else:
+                ini['step']=1
+        else:
+            ini['step']=1
+        
+
+
+def barreira_jogador(): #limites espaciais do jogador e mudancas de fase
+    global fase
+    global projeteis
+    global plataformas
+    if fase==1:
+        if jogador['x']<=-496:
+            jogador['barreira_e']=True
+        if jogador['x']>-496:
+            jogador['barreira_e']=False
+        #progredir para a fase2
+        if jogador['x']>=471:
+            if fase1['clear']==False:
+                jogador['barreira_d']=True
+        if jogador['x']<471:
+            jogador['barreira_d']=False
+        if fase1['clear']==True and jogador['x']>471: #trocar de fase
+            fase=2
+            jogador['x']=-400
+            projeteis={}
+            plataformas={}
+    if fase ==2:
+        if jogador['x']<=-496:
+            jogador['barreira_e']=True
+            jogador['barreira_d']=False
+        if jogador['x']>-460:
+            jogador['barreira_e']=False
+        if jogador['x']>460 and jogador['y']<248: #350
+            jogador['barreira_d']=True
+        if jogador['x']>460 and jogador['y']>248:
+            if fase2['clear']==True:
+                jogador['barreira_d']=False
+                jogador['x']=-400
+                projeteis=[]
+                plataformas={}
+                fase=3        
+            else:
+                jogador['barreira_d']=True
+        if jogador['x']<460:
+            jogador['barreira_d']=False   
+            
+
+
 def anima_todos_inimigos(): #verifica a colisao tanto de ini quanto de items
     if fase==1:
         for ini in inimigos1:
@@ -655,7 +859,19 @@ def anima_todos_inimigos(): #verifica a colisao tanto de ini quanto de items
             encosta_inimigo(ini)
         for item in itens1:
             encosta_item(item)
-    
+    if florzinha['vivo'] == True or chave['vivo']==True or goomba1['vivo']==True or goomba2['vivo']==True:
+        fase1['clear']=False
+    else:
+        fase1['clear']=True
+
+        ###############
+    if fase==2:
+        for ini in inimigos2:
+            encosta_fogo(ini)
+            encosta_inimigo(ini)
+            anima_inimigo2(ini)
+    if guardiao1['vivo']==False and guardiao2['vivo']==False and guardiao3['vivo']==False and guardiao4['vivo']==False and guardiao5['vivo']==False:
+        fase2['clear']=True
 
 def anima_projeteis():
     if jogador['contador_fogo']>0:
@@ -701,3 +917,4 @@ for i in range(3000):
     desenha_hud()
     movimentacao()    
     time.sleep(0.01)
+    print(jogador)
