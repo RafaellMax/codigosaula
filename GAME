@@ -1,11 +1,3 @@
-#adicionar tolerancia aos itens se der tempo
-#aumentar os elementos do hud
-############### criterios do eric ####################
-# desligar com Q
-### caprichos ###
-# suavizar a gravidade
-# bracinho tacando a bola de fogo
-# tolerancia pra pegar os itens
 
 
 from turtle import *
@@ -16,6 +8,8 @@ from sys import exit
 screen = Screen()
 screen.setup(1400,800)
 tracer(0, 0)
+bgcolor('black')
+letras=Turtle()
 
 #desenhar a fase + formas gerais
 def coracao(x,y,a=50,c1='red',c2='red'):
@@ -90,8 +84,7 @@ def acrescenta_dict(dicio, y, x, n): #### processo pra arquivar as plataformas d
     #else:
     #    dicio[str(y)] = [dicio[str(y)], x]
 
-#fase 1
-def desenha_fase(fase=1):
+def desenha_fase(fase='menu'):
     def desenha_arbusto(tamanho,x,y=0):
             pensize(1)
             up()
@@ -197,21 +190,72 @@ def desenha_fase(fase=1):
             end_fill()
             up()
             seth(0)
-    def cria_plataforma(x,y,n=5):
+    def cria_plataforma(x,y,n=5):  #### adiciona plataforma à fase e seu valores ao dicionário ####
+        global plataformas
         bloquinhos(x,y,n)
         acrescenta_dict(plataformas,y,x,n)
-
+    def desenha_ceu(c1='#76cedd',c2='#76cedd'):
+        color(c1,c2)
+        retangulo(-600,0,1200,500)  
+    def desenha_chao(s1='#ad580d',s2='#ad580d',g1='#112F05',g2='green'):
+        color(s1,s1)
+        retangulo(-600,-300,1200,300,)
+        color(g1,g2)
+        retangulo(-600,-30,1200,30)
+    def desenha_borda(c1='black',c2='black'):
+        color(c1,c2)
+        retangulo(-1000,-500,500,1000)
+        retangulo(500,-500,500,1000)
+        retangulo(-500,-500,1000,300)
     if fase=='menu':
-        bgcolor='#76cedd'
-        write('menu inicial - aperte P para começar!')
+        global letras
+        desenha_ceu()   
+        desenha_nuvem(10,-200,200)    
+        desenha_nuvem(30,200,60)
+        desenha_nuvem(40,-300,70)
+        desenha_nuvem(20,400,100)
+        desenha_nuvem(10,200,250)  
+        desenha_nuvem(10,50,300)
+        desenha_nuvem(5,50,400)
+        desenha_nuvem(5,220,350)
+        desenha_nuvem(5,-220,350)
+        desenha_nuvem(7,-320,300)
+        desenha_nuvem(5,-420,250) 
+        desenha_arbusto(10,-400)
+        desenha_arbusto(8,-40)
+        desenha_arbusto(10,200)
+        desenha_arbusto(8,370)   
+        desenha_chao()
+        desenha_borda()
+        #### parte escrita ####
+        letras.showturtle()
+        letras.up()
+        letras.goto(-150,50)
+        letras.color('grey')
+        letras.write('      MENU INICIAL\naperte P para começar!', font=('times new roman',20,'bold'))
+        letras.goto(-250,250)
+        letras.write('definitivamente não é:',font=('times new roman',10,'bold'))
+        letras.color('red')
+        letras.goto(-280,100)
+        letras.write('MARIO',font=('times new roman',120,'bold'))
+        letras.color('black')
+        letras.goto(-220,-160)
+        letras.write('ATALHOS:Setinhas -> andar e pular\n                    Espaço -> bola de fogo;\n                    Shift esquerdo -> Corre\n                    Q -> Menu',font=('times new roman',20,'bold'))
+        letras.goto(400,-300)
+        letras.color('white')
+        letras.write('Q = fechar',font=('times new roman',10,'bold'))
+
+
+        letras.hideturtle()
+        global plataformas
+        global projeteis
         plataformas={}
         projeteis=[]
     
-    if fase == 1:
+    if fase == 1 and fase1['desenhada']==False:
         
         #céu
-        color('#76cedd','#76cedd')
-        retangulo(-600,0,1200,500)
+        desenha_ceu()
 
         #nuvens
         desenha_nuvem(10,-200,200)    
@@ -284,23 +328,14 @@ def desenha_fase(fase=1):
         
         #
         #chão
-        color('#ad580d','#ad580d')
-        retangulo(-600,-300,1200,300,)
-        color('#112F05','green')
-        retangulo(-600,-30,1200,30)
+        desenha_chao()
         #
         #bordas
-        color('black','black')
-        retangulo(-1000,-500,500,1000)
-        retangulo(500,-500,500,1000)
-        retangulo(-500,-500,1000,300)
+        desenha_borda()
 
-    if fase ==2:
+    if fase ==2 and fase2['desenhada']==False:
         #ceu
-        color('#76cedd','#76cedd')
-        retangulo(-600,0,1200,500)
-        cria_plataforma(-600,0,40)
-
+        desenha_ceu()
 
         #nuvens
         desenha_nuvem(10,-300,200)    
@@ -330,6 +365,7 @@ def desenha_fase(fase=1):
         desenha_arbusto(8,-40)
         desenha_arbusto(10,200)
         desenha_arbusto(8,370)
+
          #castelo
         color('black','grey')
         retangulo(450,0,200,400)
@@ -342,7 +378,9 @@ def desenha_fase(fase=1):
         color('black','grey')
         pensize(0)
         retangulo(350,220,200,30)
+
         #chao
+        cria_plataforma(-600,0,40) #chão
         color('#ad580d','#ad580d')
         retangulo(-600,-300,1200,300,)
         color('#112F05','green')
@@ -354,14 +392,46 @@ def desenha_fase(fase=1):
         cria_plataforma(55,210,3)
 
         #bordas
+        desenha_borda()
+    if fase ==3 and fase3['desenhada']==False:
+        desenha_ceu('purple','grey')
+        desenha_chao('red','red','red','red')
+        cria_plataforma(-500,250,5)
+        cria_plataforma(150,50,15)
+        color('black','#9D5F1D')
+        retangulo(-500,220,150,30)
+        retangulo(150,20,400,30)
+        ### trofeu ###
+        color('#E9AC2A','yellow')
+        retangulo(170,110,80,10)
+        retangulo(205,50,10,20)
+        retangulo(190,70,40,40)
+        retangulo(180,90,60,40)
+        retangulo(190,50,40,10)
+        desenha_borda()
+    if fase =='gameover':
         color('black','black')
-        retangulo(-1000,-500,500,1000)
-        retangulo(500,-500,500,1000)
-        retangulo(-500,-500,1000,300)
-        
+        retangulo(-500,-300,1000,1000)
+        bgcolor('black')
+        letras.up()
+        letras.hideturtle()
+        letras.color('white')
+        letras.goto(-400,0)
+        letras.write('GAME OVER',font=('times new roman',90))
+        letras.goto(200,-50)
+        letras.write('Q -> Menu Principal',font=('times new roman',10))
+    if fase =='tela_final':
+        bgcolor('#76cedd')
+        letras.color('white')
+        letras.up()
+        letras.hideturtle()
+        letras.goto(-450,-100)
+        letras.write('VOCÊ VENCEU!\nObrigado por jogar',font=('times new roman',90))
+        letras.clear
 
+##############################################
 ############## ESTRUTURA DE DADOS  ###########  
-
+##############################################
 
 jogador = {
     'x': -450,
@@ -382,12 +452,19 @@ jogador = {
 
 projeteis=[]
 plataformas = {}
-fase=2
-fase1={'clear':False,'powerup':True, 'chave':True}
+fase='menu'
+fase1={
+    'clear':False,
+    'powerup':True, 'chave':True,
+    'desenhada':False}
 fase2={
-    'clear':False
+    'clear':False,
+    'desenhada':False
 }
-# decida aqui o que guardar para cada inimigo
+fase3={
+    'clear':False,
+    'desenhada':False}
+#### inimigos fase 1 ####
 goomba1 = {
     'step':5,
     'vivo':True,
@@ -407,6 +484,8 @@ goomba2 = {
     'altura':20,
 }
 inimigos1 = [goomba1,goomba2]
+
+#### inimigos fase 2 ####
 guardiao1 = {
     'x':400,
     'y':0,
@@ -458,6 +537,8 @@ guardiao5 = {
     'velocidade':2
 }
 inimigos2 = [guardiao1, guardiao2,guardiao3, guardiao4, guardiao5]
+
+#### itens ####
 florzinha={
     'x': -225,
     'y': 300,
@@ -473,12 +554,15 @@ chave={
     'altura':20,
 }
 itens1 = [florzinha,chave]
-
+trofeu={
+    'x':200,'y':50,'largura':20,'altura':20,'vivo':True}
+itens3=[trofeu]
 
 
 
 ######################################################
 ############### COLISAO COM OS INIMIGOS ###############
+
 def encosta_inimigo(ini):     #qnd atingido por um inimigo, o jogador entra em estado de protecao por um tempo ate poder ter vida reduzida novamente
     cont=jogador['protection_counter']
     if cont>0:
@@ -516,11 +600,14 @@ def encosta_fogo(ini):
 ############## ROTINAS GRAFICAS ###########
 ########### HUD #################
 def desenha_vida():
-    
+    global fase
     if jogador['vidas']>0:
         for v in range(jogador['vidas']):
             x,y=-400+v*150,-300
             coracao(x,y)
+    else:
+        fase='gameover'
+
 def desenha_hud():
     desenha_vida()
 #################################
@@ -620,11 +707,16 @@ def jogador_pulando(jogador):
 #o pulo e a gravidade aumentam 1p 20 vezes e 10p de uma vez; por isso os elementos de colisao devem ser dispostos em intervalos de 10x
 def jogador_gravidade(jogador):
     global plataformas
+    global fase
     if jogador['plataforma']==False and jogador['animacao']== False:
         jogador['y']-= 10
-    if jogador['y']<0:
-        jogador['y']=0
-        jogador['plataforma']=True
+    if fase != 3: #exceção pra fase 3 pq ela tem um buraco
+        if jogador['y']<0:
+            jogador['y']=0
+            jogador['plataforma']=True
+    if fase ==3:
+        if jogador['y']<0:
+            fase='gameover'
     ver_plataforma()
 def ver_plataforma(): ##### avalia de maneira generica onde tem plataforma e altera o parametro 'plataforma' de acordo com isso
     for y, plat in plataformas.items(): 
@@ -677,7 +769,7 @@ def desenha_jogo():
     reset()
     hideturtle()
     desenha_fase(fase)
-    if fase != 'menu':
+    if type(fase)==int:
         desenha_jogador(jogador)
         desenha_inimigos(fase)
         desenha_hud()
@@ -685,8 +777,90 @@ def desenha_jogo():
     
     update()
 
+def barreira_jogador(): #limites espaciais do jogador e mudancas de fase
+    global fase
+    global projeteis
+    global plataformas
+    if fase==1:
+        if jogador['x']<=-496:
+            jogador['barreira_e']=True
+        if jogador['x']>-496:
+            jogador['barreira_e']=False
+        #progredir para a fase2
+        if jogador['x']>=471:
+            if fase1['clear']==False:
+                jogador['barreira_d']=True
+        if jogador['x']<471:
+            jogador['barreira_d']=False
+        if fase1['clear']==True and jogador['x']>471: #trocar de fase
+            fase=2
+            fase1['desenhada']=False
+            jogador['x']=-400
+            projeteis=[]
+            plataformas={}
+    if fase ==2:
+        if jogador['x']<=-496:
+            jogador['barreira_e']=True
+            jogador['barreira_d']=False
+        if jogador['x']>-460:
+            jogador['barreira_e']=False
+        if jogador['x']>460 and jogador['y']<248: #350
+            jogador['barreira_d']=True
+        if jogador['x']>460 and jogador['y']>248:
+            if fase2['clear']==True:
+                jogador['barreira_d']=False
+                jogador['x']=-400
+                projeteis=[]
+                plataformas={}
+                fase=3
+                fase2['desenhada']=False       
+            else:
+                jogador['barreira_d']=True
+        if jogador['x']<460:
+            jogador['barreira_d']=False   
+    if fase == 3:
+        if trofeu['vivo']==False:
+            fase='tela_final'
+        if jogador['x']<=-496:
+            jogador['barreira_e']=True
+        if jogador['x']>-496:
+            jogador['barreira_e']=False
+        if jogador['x']>=471:
+            jogador['barreira_d']=True
+        if jogador['x']<471:
+            jogador['barreira_d']=False
+            
 
+def barreiras_inimigos():
+    for ini in inimigos1:
+        if ini['lado']=='esquerda': #borda esquerda
+            if ini['x']<-500:
+                ini['lado']='direita'
+        if ini['lado']=='direita': #borda esquerda
+            if ini['x']>500-ini['largura']:
+                ini['lado']='esquerda'
 
+     ############           
+    for ini in inimigos2:
+        if ini['lado']=='esquerda': #borda esquerda
+            if ini['x']<-500:
+                ini['lado']='direita'
+        if ini['lado']=='direita': #borda esquerda
+            if ini['x']>450-ini['largura']:
+                ini['lado']='esquerda'
+
+        if jogador['y']-ini['y']<150:
+            if ini['x']+150 >= jogador['x']>=ini['x']-150:
+                if jogador['x']>ini['x']:
+                    ini['lado'] = 'direita'
+                else:
+                    ini['lado']='esquerda'
+                ini['step']=2
+            else:
+                ini['step']=1
+        else:
+            ini['step']=1
+        
 ########### MOVIMENTAÇÃO E TECLAS DO JOGADOR #############
 teclas={'direita':False,'esquerda':False}
 def movimentacao():
@@ -733,12 +907,33 @@ def movimentacao():
         global fase
         if fase=='menu':
             fase=1
+            fase2['desenhada']=False
+            global plataformas
+            plataformas={}
+            global projeteis
+            projeteis=[]
+            jogador['x']=-400
+            for ini in inimigos1:
+                ini['vivo']=True
+                ini['x']=400
+            for ini in inimigos2:
+                ini['vivo']=True
+                ini['x']=400
+            florzinha['vivo']=True
+            chave['vivo']=True
+            trofeu['vivo']=True
+            letras.clear()
     def parar():
         global fase
         if fase == 'menu':
-            quit(1)
+            fase='off'
         else: 
             fase = 'menu'
+            fase1['desenhada']=False
+            fase2['desenhada']=False
+            fase3['desenhada']=False
+            jogador['y']=1
+            jogador['vidas']=3
         
     def cheat(): ## funcao dev pra testar as coisas mais facilmente ## ta bindada à tecla 'd'
         jogador['correndo']=3
@@ -777,81 +972,12 @@ def anima_inimigo2(ini):
     
 
     
-def barreiras_inimigos():
-    for ini in inimigos1:
-        if ini['lado']=='esquerda': #borda esquerda
-            if ini['x']<-500:
-                ini['lado']='direita'
-        if ini['lado']=='direita': #borda esquerda
-            if ini['x']>500-ini['largura']:
-                ini['lado']='esquerda'
-
-     ############           
-    for ini in inimigos2:
-        if ini['lado']=='esquerda': #borda esquerda
-            if ini['x']<-500:
-                ini['lado']='direita'
-        if ini['lado']=='direita': #borda esquerda
-            if ini['x']>450-ini['largura']:
-                ini['lado']='esquerda'
-
-        if jogador['y']-ini['y']<150:
-            if ini['x']+150 >= jogador['x']>=ini['x']-150:
-                if jogador['x']>ini['x']:
-                    ini['lado'] = 'direita'
-                else:
-                    ini['lado']='esquerda'
-                ini['step']=2
-            else:
-                ini['step']=1
-        else:
-            ini['step']=1
-        
 
 
-def barreira_jogador(): #limites espaciais do jogador e mudancas de fase
-    global fase
-    global projeteis
-    global plataformas
-    if fase==1:
-        if jogador['x']<=-496:
-            jogador['barreira_e']=True
-        if jogador['x']>-496:
-            jogador['barreira_e']=False
-        #progredir para a fase2
-        if jogador['x']>=471:
-            if fase1['clear']==False:
-                jogador['barreira_d']=True
-        if jogador['x']<471:
-            jogador['barreira_d']=False
-        if fase1['clear']==True and jogador['x']>471: #trocar de fase
-            fase=2
-            jogador['x']=-400
-            projeteis={}
-            plataformas={}
-    if fase ==2:
-        if jogador['x']<=-496:
-            jogador['barreira_e']=True
-            jogador['barreira_d']=False
-        if jogador['x']>-460:
-            jogador['barreira_e']=False
-        if jogador['x']>460 and jogador['y']<248: #350
-            jogador['barreira_d']=True
-        if jogador['x']>460 and jogador['y']>248:
-            if fase2['clear']==True:
-                jogador['barreira_d']=False
-                jogador['x']=-400
-                projeteis=[]
-                plataformas={}
-                fase=3        
-            else:
-                jogador['barreira_d']=True
-        if jogador['x']<460:
-            jogador['barreira_d']=False   
-            
 
 
-def anima_todos_inimigos(): #verifica a colisao tanto de ini quanto de items
+
+def anima_todos_inimigos(): ### VERIFICA OS ITENS TAMBEM ###
     if fase==1:
         for ini in inimigos1:
             encosta_fogo(ini)
@@ -872,6 +998,8 @@ def anima_todos_inimigos(): #verifica a colisao tanto de ini quanto de items
             anima_inimigo2(ini)
     if guardiao1['vivo']==False and guardiao2['vivo']==False and guardiao3['vivo']==False and guardiao4['vivo']==False and guardiao5['vivo']==False:
         fase2['clear']=True
+    if fase==3:
+        encosta_item(trofeu)
 
 def anima_projeteis():
     if jogador['contador_fogo']>0:
@@ -910,11 +1038,12 @@ def anima_projeteis():
 ############### LOOP PRINCIPAL ###############
 
 
-for i in range(3000):
+while True:
     anima_todos_inimigos()
     anima_projeteis()
     desenha_jogo()
     desenha_hud()
     movimentacao()    
     time.sleep(0.01)
-    print(jogador)
+    if fase=='off':
+        break
